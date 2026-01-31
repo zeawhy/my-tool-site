@@ -1,65 +1,72 @@
-import Image from "next/image";
+import ImageConverter from "./components/ImageConverter";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="flex flex-col items-center py-20 px-4">
+      <div className="w-full max-w-5xl space-y-24">
+        <ImageConverter />
+
+        {/* SEO Text Content */}
+        <section className="prose prose-zinc dark:prose-invert max-w-none">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold md:text-4xl bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent inline-block">
+              为什么选择我们的 HEIC 转 JPG 工具？
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-4 text-2xl">
+                🔒
+              </div>
+              <h3 className="text-xl font-semibold mb-3">数据安全第一</h3>
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                我们非常重视您的隐私。所有的图片转换过程完全在您的浏览器本地进行，您的照片永远不会被上传到我们的服务器。您可以放心处理个人照片或敏感文档，以此杜绝隐私泄露的风险。
+              </p>
+            </div>
+
+            <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-4 text-2xl">
+                ⚡
+              </div>
+              <h3 className="text-xl font-semibold mb-3">闪电般的转换速度</h3>
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                得益于先进的 WebAssembly 和浏览器原生技术，转换过程无需网络传输，直接利用您的设备性能。这意味着即使是几百兆的大文件也能在瞬间完成处理，告别漫长的上传和下载等待。
+              </p>
+            </div>
+
+            <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-4 text-2xl">
+                🚀
+              </div>
+              <h3 className="text-xl font-semibold mb-3">永久免费且无限制</h3>
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                我们承诺为您提供完全免费的服务。没有文件大小限制，没有每日转换数量限制，更没有隐藏的付费墙。无论您是需要转换一张照片还是批量处理整个相册，MyTools 都是您得力的助手。
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 p-8 bg-zinc-50 dark:bg-zinc-900 rounded-3xl border border-zinc-100 dark:border-zinc-800">
+            <h3 className="text-2xl font-bold mb-6">关于 HEIC 和 WebP 格式</h3>
+            <div className="space-y-4 text-zinc-600 dark:text-zinc-400">
+              <p>
+                <strong className="text-zinc-900 dark:text-white">HEIC (High Efficiency Image Container)</strong>{" "}
+                是 Apple 设备广泛使用的高效图片格式，虽然它能以更小的体积提供更好的画质，但在 Windows 和 Android
+                设备上的兼容性尚待提高。
+              </p>
+              <p>
+                <strong className="text-zinc-900 dark:text-white">WebP</strong> 是 Google
+                推出的现代图片格式，专为 Web 优化。尽管它在网页加载速度上表现优异，但在某些旧版软件中编辑或查看仍有困难。
+              </p>
+              <p>
+                我们的工具帮您轻松将这些现代格式一键转换为通用的{" "}
+                <strong className="text-zinc-900 dark:text-white">JPEG (JPG)</strong>{" "}
+                格式，确保您的图片可以在任何设备、任何软件上完美显示和分享。
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
