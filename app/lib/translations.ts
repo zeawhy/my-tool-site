@@ -41,6 +41,10 @@ export const translations = {
             desc1: "HEIC (High Efficiency Image Container) is the default image format for iPhones. While efficient, it's not widely supported on Windows or Android.",
             desc2: "Our tool helps you convert these files to the universally compatible JPG format without compromising privacy.",
         },
+        cross_promo: {
+            text: "Need smaller files? Compress with YuliusBox",
+            link: "https://www.yuliusbox.com/tools/image-compressor",
+        },
         footer: {
             copyright: "Heic2Jpg Free. All rights reserved.",
         },
@@ -86,6 +90,10 @@ export const translations = {
             title: "关于 HEIC 和 WebP 格式",
             desc1: "HEIC (High Efficiency Image Container) 是 iPhone 的默认图片格式。虽然它效率很高，但在 Windows 或 Android 上的兼容性较差。",
             desc2: "我们的工具可以帮助您将这些文件转换为通用的 JPG 格式，同时保护您的隐私。",
+        },
+        cross_promo: {
+            text: "需要更小的文件？使用 YuliusBox 压缩",
+            link: "https://www.yuliusbox.com/tools/image-compressor",
         },
         footer: {
             copyright: "Heic2Jpg Free. All rights reserved.",

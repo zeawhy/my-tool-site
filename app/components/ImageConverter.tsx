@@ -316,6 +316,19 @@ export default function ImageConverter() {
                             {t.converter.download_all}
                         </button>
                     </div>
+
+                    {/* Cross Promotion */}
+                    <div className="text-center pb-2">
+                        <a
+                            href={t.cross_promo.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors border-b border-transparent hover:border-current"
+                        >
+                            {t.cross_promo.text}
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
                 </div>
             )}
         </div>
