@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 // 这里的 URL 换成你刚才买的新域名
@@ -63,6 +64,15 @@ export default function RootLayout({
             <p>&copy; {new Date().getFullYear()} Heic2Jpg Free. All rights reserved.</p>
           </div>
         </footer>
+        <Script id="clarity-script" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "v9vh2qgro7");
+          `}
+        </Script>
       </body>
     </html>
   );
