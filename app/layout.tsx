@@ -48,7 +48,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                MyTools
+                Heic2Jpg Free
               </span>
             </div>
           </div>
@@ -60,7 +60,7 @@ export default function RootLayout({
 
         <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 mt-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
-            <p>&copy; {new Date().getFullYear()} MyTools. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Heic2Jpg Free. All rights reserved.</p>
           </div>
         </footer>
       </body>

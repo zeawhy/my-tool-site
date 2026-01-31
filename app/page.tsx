@@ -41,7 +41,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-semibold mb-3">永久免费且无限制</h3>
               <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                我们承诺为您提供完全免费的服务。没有文件大小限制，没有每日转换数量限制，更没有隐藏的付费墙。无论您是需要转换一张照片还是批量处理整个相册，MyTools 都是您得力的助手。
+                我们承诺为您提供完全免费的服务。没有文件大小限制，没有每日转换数量限制，更没有隐藏的付费墙。无论您是需要转换一张照片还是批量处理整个相册，Heic2Jpg Free 都是您得力的助手。
               </p>
             </div>
           </div>
