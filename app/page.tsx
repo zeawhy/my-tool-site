@@ -46,6 +46,15 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 shadow-sm">
+            <h3 className="text-2xl font-bold mb-6 text-center">如何使用（3步搞定）</h3>
+            <ol className="list-decimal list-inside space-y-4 text-zinc-600 dark:text-zinc-400 text-lg">
+              <li className="pl-2"><span className="font-semibold text-zinc-900 dark:text-white">上传：</span> 将您的 HEIC/WebP 图片拖入上方虚线框。</li>
+              <li className="pl-2"><span className="font-semibold text-zinc-900 dark:text-white">转换：</span> 系统会自动在本地处理，无需等待上传。</li>
+              <li className="pl-2"><span className="font-semibold text-zinc-900 dark:text-white">下载：</span> 预览满意后，点击“下载全部”保存 JPG 图片。</li>
+            </ol>
+          </div>
+
           <div className="mt-16 p-8 bg-zinc-50 dark:bg-zinc-900 rounded-3xl border border-zinc-100 dark:border-zinc-800">
             <h3 className="text-2xl font-bold mb-6">关于 HEIC 和 WebP 格式</h3>
             <div className="space-y-4 text-zinc-600 dark:text-zinc-400">
