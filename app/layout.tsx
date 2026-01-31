@@ -5,6 +5,10 @@ import "./globals.css";
 // 这里的 URL 换成你刚才买的新域名
 const SITE_URL = "https://www.heic2jpg-free.com";
 
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { LanguageProvider } from "./context/LanguageContext";
+
 export const metadata: Metadata = {
   title: {
     default: "免费在线 HEIC 转 JPG 工具 (本地处理，保护隐私)",
@@ -45,25 +49,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-white dark:bg-black text-black dark:text-white flex flex-col min-h-screen">
-        <header className="w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Heic2Jpg Free
-              </span>
-            </div>
-          </div>
-        </header>
-
-        <main className="flex-grow">
-          {children}
-        </main>
-
-        <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
-            <p>&copy; {new Date().getFullYear()} Heic2Jpg Free. All rights reserved.</p>
-          </div>
-        </footer>
+        <LanguageProvider>
+          <Header />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </LanguageProvider>
         <Script id="clarity-script" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){

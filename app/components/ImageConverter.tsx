@@ -16,7 +16,10 @@ interface ProcessedImage {
     newSize?: number;
 }
 
+import { useLanguage } from "../context/LanguageContext";
+
 export default function ImageConverter() {
+    const { t } = useLanguage();
     const [images, setImages] = useState<ProcessedImage[]>([]);
     const [isDragOver, setIsDragOver] = useState(false);
 
@@ -191,10 +194,10 @@ export default function ImageConverter() {
             {/* Header */}
             <div className="text-center space-y-2">
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    图片格式转换器
+                    {t.hero.title}
                 </h2>
                 <p className="text-zinc-500 dark:text-zinc-400">
-                    HEIC / WebP 转 JPEG，本地处理，安全高效
+                    {t.hero.subtitle}
                 </p>
             </div>
 
@@ -223,10 +226,10 @@ export default function ImageConverter() {
                     </div>
                     <div className="space-y-1">
                         <p className="text-lg font-medium text-zinc-900 dark:text-white">
-                            点击或拖拽上传图片
+                            {t.converter.dropzone}
                         </p>
                         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                            支持批量上传 HEIC 和 WebP 格式
+                            {t.converter.dropzone_sub}
                         </p>
                     </div>
                 </div>
@@ -289,12 +292,12 @@ export default function ImageConverter() {
                                             className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-lg transition-colors"
                                         >
                                             <Download className="w-4 h-4" />
-                                            下载
+                                            {t.converter.download}
                                         </button>
                                     )}
                                     {img.status === "error" && (
                                         <p className="text-xs text-red-500 text-center py-2 bg-red-50 dark:bg-red-900/10 rounded-lg">
-                                            {img.errorMsg}
+                                            {img.errorMsg || t.converter.status_error}
                                         </p>
                                     )}
                                 </div>
@@ -310,7 +313,7 @@ export default function ImageConverter() {
                             className="flex items-center gap-2 px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 active:scale-95 transition-all"
                         >
                             <Download className="w-5 h-5" />
-                            打包下载全部
+                            {t.converter.download_all}
                         </button>
                     </div>
                 </div>
