@@ -1,9 +1,39 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// 这里的 URL 换成你刚才买的新域名
+const SITE_URL = "https://www.heic2jpg-free.com";
+
 export const metadata: Metadata = {
-  title: "Image Converter - Free HEIC/WebP to JPG Tool",
-  description: "Convert HEIC and WebP images to JPG format for free. Secure, fast, and processed locally in your browser.",
+  title: {
+    default: "免费在线 HEIC 转 JPG 工具 (本地处理，保护隐私)",
+    template: "%s | Free HEIC to JPG Converter",
+  },
+  description: "全网最安全的 HEIC 转 JPG 在线工具。无需上传服务器，100% 浏览器本地转换。支持 HEIC, WebP 批量转 JPEG/PNG，保留 Exif 信息，永久免费。",
+  keywords: [
+    "HEIC转JPG",
+    "HEIC to JPG converter",
+    "WebP to JPG",
+    "iphone photo converter",
+    "online image converter",
+    "免费图片转换",
+    "privacy focused image tool"
+  ],
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    title: "免费 HEIC 转 JPG - 极速、安全、不上传",
+    description: "如果你担心照片泄露，请使用这个纯本地转换工具。支持批量转换，秒级处理。",
+    url: SITE_URL,
+    siteName: "Secure HEIC Converter",
+    locale: "zh_CN",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
