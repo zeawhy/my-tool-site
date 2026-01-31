@@ -48,6 +48,9 @@ export const translations = {
         footer: {
             copyright: "Heic2Jpg Free. All rights reserved.",
         },
+        donation: {
+            text: "Find this tool useful? Buy me a coffee ☕️",
+        },
     },
     cn: {
         header: {
@@ -97,6 +100,9 @@ export const translations = {
         },
         footer: {
             copyright: "Heic2Jpg Free. All rights reserved.",
+        },
+        donation: {
+            text: "觉得好用？请我喝杯咖啡 ☕️",
         },
     },
 };
