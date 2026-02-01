@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from "next/script";
 import "./globals.css";
 
@@ -69,6 +70,7 @@ export default function RootLayout({
           `}
         </Script>
       </body>
+      <GoogleAnalytics gaId="G-CH0GSRDG6C" />
     </html>
   );
 }
