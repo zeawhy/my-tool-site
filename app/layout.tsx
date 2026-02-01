@@ -70,7 +70,7 @@ export default function RootLayout({
           `}
         </Script>
       </body>
-      <GoogleAnalytics gaId="G-CH0GSRDG6C" />
+      <GoogleAnalytics gaId="G-5CL464Q7FH" />
     </html>
   );
 }
