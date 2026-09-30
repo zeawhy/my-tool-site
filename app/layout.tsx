@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from "next/script";
 import "./globals.css";
 
@@ -66,15 +65,6 @@ export default function RootLayout({
           </main>
           <Footer />
         </LanguageProvider>
-        <Script id="clarity-script" strategy="afterInteractive">
-          {`
-            (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "v9vh2qgro7");
-          `}
-        </Script>
         {umamiWebsiteId && (
           <Script
             src={`${umamiUrl}/script.js`}
@@ -84,7 +74,6 @@ export default function RootLayout({
           />
         )}
       </body>
-      <GoogleAnalytics gaId="G-5CL464Q7FH" />
     </html>
   );
 }
