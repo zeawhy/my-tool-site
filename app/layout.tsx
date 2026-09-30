@@ -6,6 +6,12 @@ import "./globals.css";
 // 这里的 URL 换成你刚才买的新域名
 const SITE_URL = "https://www.heic2jpg-free.com";
 
+// Umami (self-hosted, cookieless analytics). The tracking script is only
+// injected once NEXT_PUBLIC_UMAMI_WEBSITE_ID is set, so the site works fine
+// before the Website ID is configured.
+const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL || "https://stats.yuliusbox.com";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { LanguageProvider } from "./context/LanguageContext";
@@ -69,6 +75,14 @@ export default function RootLayout({
             })(window, document, "clarity", "script", "v9vh2qgro7");
           `}
         </Script>
+        {umamiWebsiteId && (
+          <Script
+            src={`${umamiUrl}/script.js`}
+            data-website-id={umamiWebsiteId}
+            data-domains="heic2jpg-free.com,www.heic2jpg-free.com"
+            strategy="afterInteractive"
+          />
+        )}
       </body>
       <GoogleAnalytics gaId="G-5CL464Q7FH" />
     </html>
