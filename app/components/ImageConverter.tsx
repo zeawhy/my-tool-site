@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { Upload, X, Download, FileImage, Loader2 } from "lucide-react";
 import clsx from "clsx";
+import type { UIStrings } from "../lib/translations";
 
 interface ProcessedImage {
     id: string;
@@ -16,12 +17,32 @@ interface ProcessedImage {
     newSize?: number;
 }
 
-import { useLanguage } from "../context/LanguageContext";
+interface ImageConverterProps {
+    t: UIStrings["converter"];
+    heroTitle: string;
+    heroSubtitle: string;
+    dropzoneSub: string;
+    from: ("heic" | "webp")[];
+    to: "jpg" | "png";
+}
 
-export default function ImageConverter() {
-    const { t } = useLanguage();
+// Fire-and-forget Umami custom events (only if the Umami script loaded).
+function trackEvent(name: string, data?: Record<string, string | number>) {
+    try {
+        (window as unknown as { umami?: { track: (n: string, d?: object) => void } }).umami?.track(name, data);
+    } catch {
+        /* analytics must never break the tool */
+    }
+}
+
+export default function ImageConverter({ t, heroTitle, heroSubtitle, dropzoneSub, from, to }: ImageConverterProps) {
     const [images, setImages] = useState<ProcessedImage[]>([]);
     const [isDragOver, setIsDragOver] = useState(false);
+
+    const targetExt = to === "jpg" ? ".jpg" : ".png";
+    const targetMime = to === "jpg" ? "image/jpeg" : "image/png";
+    const acceptAttr = from.map((f) => `.${f}`).join(",");
+    const fromLabel = from.join("/").toUpperCase();
 
     const processFile = async (id: string, file: File) => {
         setImages((prev) =>
@@ -35,19 +56,19 @@ export default function ImageConverter() {
             const isHeic = file.name.toLowerCase().endsWith(".heic");
 
             if (isHeic) {
-                // Convert HEIC
+                // Convert HEIC (WASM lib loaded lazily, only when needed)
                 const heic2any = (await import("heic2any")).default;
                 const conversionResult = await heic2any({
                     blob: file,
-                    toType: "image/jpeg",
+                    toType: targetMime,
                     quality: 0.8,
                 });
 
                 resultBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
 
             } else {
-                // Convert WebP
-                resultBlob = await convertWebPToJpeg(file);
+                // Convert WebP via canvas
+                resultBlob = await convertWebP(file);
             }
 
             const previewUrl = URL.createObjectURL(resultBlob);
@@ -65,19 +86,21 @@ export default function ImageConverter() {
                         : img
                 )
             );
+            trackEvent("convert_success", { from: fromLabel, to: to.toUpperCase() });
         } catch (error) {
             console.error("Conversion error:", error);
             setImages((prev) =>
                 prev.map((img) =>
                     img.id === id
-                        ? { ...img, status: "error", errorMsg: "转换失败" }
+                        ? { ...img, status: "error", errorMsg: t.status_error }
                         : img
                 )
             );
+            trackEvent("convert_fail", { from: fromLabel, to: to.toUpperCase() });
         }
     };
 
-    const convertWebPToJpeg = (file: File): Promise<Blob> => {
+    const convertWebP = (file: File): Promise<Blob> => {
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => {
@@ -93,7 +116,7 @@ export default function ImageConverter() {
                 canvas.toBlob((blob) => {
                     if (blob) resolve(blob);
                     else reject(new Error("Canvas to Blob failed"));
-                }, "image/jpeg", 0.8);
+                }, targetMime, 0.8);
             };
             img.onerror = (e) => reject(e);
             img.src = URL.createObjectURL(file);
@@ -115,12 +138,12 @@ export default function ImageConverter() {
         const newImages: ProcessedImage[] = files
             .filter(file => {
                 const name = file.name.toLowerCase();
-                return name.endsWith(".heic") || name.endsWith(".webp");
+                return from.some((f) => name.endsWith(`.${f}`));
             })
             .map(file => ({
                 id: Math.random().toString(36).substring(7),
                 originalName: file.name,
-                newName: file.name.replace(/\.(heic|webp)$/i, ".jpg"),
+                newName: file.name.replace(/\.(heic|webp)$/i, targetExt),
                 blob: new Blob(),
                 previewUrl: "",
                 status: "pending",
@@ -130,12 +153,13 @@ export default function ImageConverter() {
         if (newImages.length === 0) return;
 
         setImages(prev => [...prev, ...newImages]);
+        trackEvent("file_selected", { count: newImages.length, from: fromLabel });
 
         // 2. Queue processing with concurrency limit
         const pLimit = (await import("p-limit")).default;
         const limit = pLimit(2); // Limit concurrency to 2
 
-        newImages.forEach((img, index) => {
+        newImages.forEach((img) => {
             // Find corresponding file
             // Note: this simple matching assumes index order is preserved, which it is
             const file = files.find(f => f.name === img.originalName && f.size === img.originalSize);
@@ -187,17 +211,18 @@ export default function ImageConverter() {
 
         const content = await zip.generateAsync({ type: "blob" });
         saveAs(content, "images_converted.zip");
+        trackEvent("download_all", { count: completedImages.length, to: to.toUpperCase() });
     };
 
     return (
         <div className="w-full max-w-4xl mx-auto p-6 space-y-8">
             {/* Header */}
             <div className="text-center space-y-2">
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    {t.hero.title}
-                </h2>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    {heroTitle}
+                </h1>
                 <p className="text-zinc-500 dark:text-zinc-400">
-                    {t.hero.subtitle}
+                    {heroSubtitle}
                 </p>
             </div>
 
@@ -216,7 +241,7 @@ export default function ImageConverter() {
                 <input
                     type="file"
                     multiple
-                    accept=".heic,.webp"
+                    accept={acceptAttr}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     onChange={handleFileSelect}
                 />
@@ -226,10 +251,10 @@ export default function ImageConverter() {
                     </div>
                     <div className="space-y-1">
                         <p className="text-lg font-medium text-zinc-900 dark:text-white">
-                            {t.converter.dropzone}
+                            {t.dropzone}
                         </p>
                         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                            {t.converter.dropzone_sub}
+                            {dropzoneSub}
                         </p>
                     </div>
                 </div>
@@ -292,12 +317,12 @@ export default function ImageConverter() {
                                             className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-lg transition-colors"
                                         >
                                             <Download className="w-4 h-4" />
-                                            {t.converter.download}
+                                            {t.download}
                                         </button>
                                     )}
                                     {img.status === "error" && (
                                         <p className="text-xs text-red-500 text-center py-2 bg-red-50 dark:bg-red-900/10 rounded-lg">
-                                            {img.errorMsg || t.converter.status_error}
+                                            {img.errorMsg || t.status_error}
                                         </p>
                                     )}
                                 </div>
@@ -313,21 +338,8 @@ export default function ImageConverter() {
                             className="flex items-center gap-2 px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 active:scale-95 transition-all"
                         >
                             <Download className="w-5 h-5" />
-                            {t.converter.download_all}
+                            {t.download_all}
                         </button>
-                    </div>
-
-                    {/* Cross Promotion */}
-                    <div className="text-center pb-2">
-                        <a
-                            href={t.cross_promo.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors border-b border-transparent hover:border-current"
-                        >
-                            {t.cross_promo.text}
-                            <span aria-hidden="true">→</span>
-                        </a>
                     </div>
                 </div>
             )}
