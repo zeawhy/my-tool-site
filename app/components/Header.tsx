@@ -15,12 +15,11 @@ export default async function Header() {
 
   const homeHref = locale === "en" ? "/en" : "/";
   // Language toggle: mirror the current page in the other locale.
-  // Guides are Chinese-only, so they fall back to the English home.
   let alternate: string;
   if (locale === "en") {
     alternate = pathname.replace(/^\/en/, "") || "/";
   } else {
-    alternate = pathname.startsWith("/guides") ? "/en" : `/en${pathname === "/" ? "" : pathname}`;
+    alternate = `/en${pathname === "/" ? "" : pathname}`;
   }
 
   return (
@@ -43,11 +42,9 @@ export default async function Header() {
             <a href={toolHref(locale, "webp-to-jpg")} className="hover:text-blue-600 dark:hover:text-blue-400">
               {t.tools["webp-to-jpg"]}
             </a>
-            {locale === "zh" && (
-              <a href="/guides" className="hover:text-blue-600 dark:hover:text-blue-400">
-                {t.nav.guides}
-              </a>
-            )}
+            <a href={locale === "en" ? "/en/guides" : "/guides"} className="hover:text-blue-600 dark:hover:text-blue-400">
+              {t.nav.guides}
+            </a>
           </nav>
         </div>
         <a

@@ -35,6 +35,68 @@ function trackEvent(name: string, data?: Record<string, string | number>) {
     }
 }
 
+function applyOrientation(blob: Blob, orientation: number, targetMime: string): Promise<Blob> {
+    return new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(blob);
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+                resolve(blob);
+                return;
+            }
+            const width = img.naturalWidth || img.width;
+            const height = img.naturalHeight || img.height;
+
+            if ([5, 6, 7, 8].includes(orientation)) {
+                canvas.width = height;
+                canvas.height = width;
+            } else {
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            switch (orientation) {
+                case 2:
+                    ctx.transform(-1, 0, 0, 1, width, 0);
+                    break;
+                case 3:
+                    ctx.transform(-1, 0, 0, -1, width, height);
+                    break;
+                case 4:
+                    ctx.transform(1, 0, 0, -1, 0, height);
+                    break;
+                case 5:
+                    ctx.transform(0, 1, 1, 0, 0, 0);
+                    break;
+                case 6:
+                    ctx.transform(0, 1, -1, 0, height, 0);
+                    break;
+                case 7:
+                    ctx.transform(0, -1, -1, 0, height, width);
+                    break;
+                case 8:
+                    ctx.transform(0, -1, 1, 0, 0, width);
+                    break;
+                default:
+                    break;
+            }
+
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((rotatedBlob) => {
+                resolve(rotatedBlob || blob);
+            }, targetMime, 0.8);
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(blob);
+        };
+        img.src = url;
+    });
+}
+
 export default function ImageConverter({ t, heroTitle, heroSubtitle, dropzoneSub, from, to }: ImageConverterProps) {
     const [images, setImages] = useState<ProcessedImage[]>([]);
     const [isDragOver, setIsDragOver] = useState(false);
@@ -56,7 +118,16 @@ export default function ImageConverter({ t, heroTitle, heroSubtitle, dropzoneSub
             const isHeic = file.name.toLowerCase().endsWith(".heic");
 
             if (isHeic) {
-                // Convert HEIC (WASM lib loaded lazily, only when needed)
+                // 1. Read EXIF orientation before conversion
+                let orientation: number | undefined;
+                try {
+                    const exifr = (await import("exifr")).default || (await import("exifr"));
+                    orientation = await exifr.orientation(file);
+                } catch {
+                    // Ignore EXIF read errors gracefully
+                }
+
+                // 2. Convert HEIC (WASM lib loaded lazily, only when needed)
                 const heic2any = (await import("heic2any")).default;
                 const conversionResult = await heic2any({
                     blob: file,
@@ -64,8 +135,14 @@ export default function ImageConverter({ t, heroTitle, heroSubtitle, dropzoneSub
                     quality: 0.8,
                 });
 
-                resultBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
+                const rawBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
 
+                // 3. Normalize orientation if needed (e.g. portrait photos with orientation 6 or 8, or upside-down 3)
+                if (orientation && orientation > 1) {
+                    resultBlob = await applyOrientation(rawBlob, orientation, targetMime);
+                } else {
+                    resultBlob = rawBlob;
+                }
             } else {
                 // Convert WebP via canvas
                 resultBlob = await convertWebP(file);

@@ -3,14 +3,23 @@ import { guides } from "../lib/content";
 import { SITE_URL } from "../lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const zhUrl = `${SITE_URL}/guides`;
+  const enUrl = `${SITE_URL}/en/guides`;
   return {
     title: "使用指南 - 图片格式知识库",
     description: "HEIC 是什么？Windows 怎么打开 HEIC？iPhone 怎么设置拍 JPG？用通俗的语言讲清图片格式的那些事。",
-    alternates: { canonical: `${SITE_URL}/guides` },
+    alternates: {
+      canonical: zhUrl,
+      languages: {
+        "zh-CN": zhUrl,
+        en: enUrl,
+        "x-default": enUrl,
+      },
+    },
     openGraph: {
       title: "使用指南 - 图片格式知识库",
       description: "用通俗的语言讲清 HEIC、JPG、PNG、WebP 这些图片格式。",
-      url: `${SITE_URL}/guides`,
+      url: zhUrl,
       siteName: "Heic2Jpg",
       locale: "zh_CN",
       type: "website",
@@ -19,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function GuidesIndex() {
-  const list = Object.values(guides);
+  const list = Object.values(guides.zh);
   return (
     <div className="w-full max-w-3xl mx-auto px-6 py-12">
       <h1 className="text-3xl font-bold mb-4">使用指南</h1>
