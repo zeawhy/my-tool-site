@@ -16,7 +16,9 @@ export default async function Footer() {
   const h = await headers();
   const locale: UILocale = h.get("x-locale") === "en" ? "en" : "zh";
   const t = ui[locale];
-  const guideSlugs = Object.keys(guides);
+  const currentGuides = guides[locale];
+  const guideSlugs = Object.keys(currentGuides);
+  const guidesBase = locale === "en" ? "/en/guides" : "/guides";
 
   return (
     <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 mt-auto">
@@ -30,20 +32,18 @@ export default async function Footer() {
               <li><a href={toolHref(locale, "webp-to-jpg")} className="hover:text-blue-600 dark:hover:text-blue-400">{t.tools["webp-to-jpg"]}</a></li>
             </ul>
           </div>
-          {locale === "zh" && (
-            <div>
-              <p className="font-semibold mb-3 text-zinc-900 dark:text-white">{t.footer.guidesTitle}</p>
-              <ul className="space-y-2 text-zinc-500 dark:text-zinc-400">
-                {guideSlugs.map((slug) => (
-                  <li key={slug}>
-                    <a href={`/guides/${slug}`} className="hover:text-blue-600 dark:hover:text-blue-400">
-                      {guides[slug].h1.length > 18 ? guides[slug].h1.slice(0, 18) + "…" : guides[slug].h1}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div>
+            <p className="font-semibold mb-3 text-zinc-900 dark:text-white">{t.footer.guidesTitle}</p>
+            <ul className="space-y-2 text-zinc-500 dark:text-zinc-400">
+              {guideSlugs.map((slug) => (
+                <li key={slug}>
+                  <a href={`${guidesBase}/${slug}`} className="hover:text-blue-600 dark:hover:text-blue-400">
+                    {currentGuides[slug].h1.length > 28 ? currentGuides[slug].h1.slice(0, 28) + "…" : currentGuides[slug].h1}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div>
             <p className="font-semibold mb-3 text-zinc-900 dark:text-white">{t.footer.aboutTitle}</p>
             <ul className="space-y-2 text-zinc-500 dark:text-zinc-400">

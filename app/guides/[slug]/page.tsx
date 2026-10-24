@@ -4,7 +4,7 @@ import { guides } from "../../lib/content";
 import { guideMetadata, SITE_URL } from "../../lib/seo";
 
 export async function generateStaticParams() {
-  return Object.keys(guides).map((slug) => ({ slug }));
+  return Object.keys(guides.zh).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -13,8 +13,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (!guides[slug]) return {};
-  return guideMetadata(slug);
+  if (!guides.zh[slug]) return {};
+  return guideMetadata(slug, "zh");
 }
 
 export default async function GuidePage({
@@ -23,7 +23,7 @@ export default async function GuidePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const g = guides[slug];
+  const g = guides.zh[slug];
   if (!g) notFound();
 
   const canonical = `${SITE_URL}/guides/${slug}`;
@@ -60,7 +60,25 @@ export default async function GuidePage({
       />
 
       <h1 className="text-3xl font-bold mb-6">{g.h1}</h1>
-      <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-10 leading-relaxed">{g.intro}</p>
+      <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8 leading-relaxed">{g.intro}</p>
+
+      {/* Top Tool CTA */}
+      <div className="mb-10 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/30 border border-blue-200/80 dark:border-blue-900/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <p className="font-semibold text-zinc-900 dark:text-zinc-100 text-base">
+            手头有 HEIC 照片急需处理？
+          </p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-0.5">
+            在浏览器中转换，照片不会上传到服务器，批量不限次数。
+          </p>
+        </div>
+        <a
+          href="/"
+          className="shrink-0 inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors shadow-sm"
+        >
+          立即把 HEIC 转成 JPG →
+        </a>
+      </div>
 
       <div className="space-y-10">
         {g.sections.map((s, i) => (
@@ -92,10 +110,17 @@ export default async function GuidePage({
         </section>
       )}
 
-      <div className="mt-12 p-8 text-center rounded-3xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900">
+      {/* Bottom Tool CTA */}
+      <div className="mt-14 p-8 text-center rounded-3xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 shadow-sm">
+        <h3 className="text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-100">
+          准备好转换你的 HEIC 照片了吗？
+        </h3>
+        <p className="text-zinc-600 dark:text-zinc-400 text-sm max-w-lg mx-auto mb-6">
+          无需下载软件，无需注册账号。在浏览器中转换，照片不会上传到服务器，一键生成通用 JPG。
+        </p>
         <a
           href={g.toolLink === "heic-to-jpg" ? "/" : `/${g.toolLink}`}
-          className="inline-block px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+          className="inline-block px-8 py-3.5 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
         >
           {g.toolLinkText}
         </a>

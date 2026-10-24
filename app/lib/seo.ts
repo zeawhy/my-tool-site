@@ -40,19 +40,28 @@ export function toolMetadata(locale: ContentLocale, pageId: PageId): Metadata {
   };
 }
 
-export function guideMetadata(slug: string): Metadata {
-  const g = guides[slug];
-  const canonical = `${SITE_URL}/guides/${slug}`;
+export function guideMetadata(slug: string, locale: ContentLocale = "zh"): Metadata {
+  const g = guides[locale]?.[slug] || guides["zh"][slug];
+  const zhUrl = `${SITE_URL}/guides/${slug}`;
+  const enUrl = `${SITE_URL}/en/guides/${slug}`;
+  const canonical = locale === "en" ? enUrl : zhUrl;
   return {
     title: g.title,
     description: g.description,
-    alternates: { canonical },
+    alternates: {
+      canonical,
+      languages: {
+        "zh-CN": zhUrl,
+        en: enUrl,
+        "x-default": enUrl,
+      },
+    },
     openGraph: {
       title: g.title,
       description: g.description,
       url: canonical,
       siteName: "Heic2Jpg",
-      locale: "zh_CN",
+      locale: locale === "zh" ? "zh_CN" : "en_US",
       type: "article",
       images: [{ url: "/og-cover.jpg", width: 1200, height: 630, alt: g.h1 }],
     },
