@@ -184,7 +184,7 @@ export default function ToolPage({ locale, pageId, canonical }: ToolPageProps) {
             {relatedPages.map((p) => (
               <a
                 key={p}
-                href={`${prefix}/${p}`.replace("//", "/")}
+                href={pageUrl(locale, p)}
                 className="px-6 py-3 rounded-full border border-zinc-200 dark:border-zinc-700 font-medium hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 {t.tools[p]}
